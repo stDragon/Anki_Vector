@@ -6,6 +6,7 @@
 import functools
 import threading
 import anki_vector
+from anki_vector.connection import ControlPriorityLevel
 from anki_vector.events import Events
 
 wake_word_heard = False
@@ -14,17 +15,19 @@ wake_word_heard = False
 def main():
     evt = threading.Event()
 
-    def on_wake_word(robot, event_type, event):
+    def on_wake_word(robot, event_type, event, msg):
         robot.conn.request_control()
 
         global wake_word_heard
         if not wake_word_heard:
             wake_word_heard = True
-            robot.say_text("I'm getting a little fed up with all these demands")
+            robot.behavior.say_text("I'm getting a little fed up with all these demands")
             evt.set()
 
     args = anki_vector.util.parse_command_args()
-    with anki_vector.Robot(args.serial, requires_behavior_control=False, cache_animation_list=False) as robot:
+    with anki_vector.Robot(args.serial,
+                           behavior_control_level=ControlPriorityLevel.DEFAULT_PRIORITY,
+                           cache_animation_lists=False) as robot:
         on_wake_word = functools.partial(on_wake_word, robot)
         robot.events.subscribe(on_wake_word, Events.wake_word)
 

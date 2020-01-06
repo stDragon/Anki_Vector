@@ -11,41 +11,41 @@ def get_guess():
 
         robot.behavior.drive_off_charger()
         time.sleep(1)
-        robot.say_text("Let's play hang man")
+        robot.behavior.say_text("Let's play hang man")
         robot.anim.play_animation('anim_onboarding_reacttoface_happy_01')
 
         while guesses_left > 0 and not dashes == secret_word:
 
             print(dashes)
-            robot.say_text("You have" + str(guesses_left) + "guesses remaining")
+            robot.behavior.say_text("You have" + str(guesses_left) + "guesses remaining")
 
             guess = input("Guess:")
 
             if len(guess) != 1:
-                robot.say_text("Your guess must have exactly one character!")
+                robot.behavior.say_text("Your guess must have exactly one character!")
                 robot.anim.play_animation('anim_dancebeat_cantdothat_01')
 
             elif guess in secret_word:
-                robot.say_text("You have chosen")
+                robot.behavior.say_text("You have chosen")
                 time.sleep(0.2)
-                robot.say_text("Wisely")
+                robot.behavior.say_text("Wisely")
                 robot.anim.play_animation('anim_onboarding_reacttoface_happy_01_head_angle_-20')
                 dashes = update_dashes(secret_word, dashes, guess)
 
             else:
-                robot.say_text("You have chosen")
+                robot.behavior.say_text("You have chosen")
                 time.sleep(0.2)
-                robot.say_text("Un wisely")
+                robot.behavior.say_text("Un wisely")
                 robot.anim.play_animation('anim_eyepose_sad_down')
                 guesses_left -= 1
 
         if guesses_left < 1:
-            robot.say_text("You lose. The word was: " + str(secret_word))
+            robot.behavior.say_text("You lose. The word was: " + str(secret_word))
             robot.anim.play_animation('anim_eyepose_sad_instronspect')
             robot.behavior.drive_on_charger()
 
         else:
-            robot.say_text("Congratulations! You win. The word was: " + str(secret_word))
+            robot.behavior.say_text("Congratulations! You win. The word was: " + str(secret_word))
             robot.anim.play_animation('anim_holiday_hyn_confetti_01')
             robot.behavior.drive_on_charger()
 
